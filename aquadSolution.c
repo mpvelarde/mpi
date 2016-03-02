@@ -165,7 +165,7 @@ void worker(int mypid) {
         fright = task[3];
         lrarea = task[4];
         
-        /*mid = (left + right) / 2;
+        mid = (left + right) / 2;
         fmid = F(mid);
         
         // Get result
@@ -175,7 +175,7 @@ void worker(int mypid) {
         result[0] = larea;
         result[1] = rarea;
         
-        if( fabs((larea + rarea) - lrarea) > EPSILON ) {
+        /*if( fabs((larea + rarea) - lrarea) > EPSILON ) {
             result[2] = left;
             result[3] = mid;
             result[4] = right;
