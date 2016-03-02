@@ -99,7 +99,9 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     points[4] = abarea;
     push(points, tasks);
     
-    i = (rand() % (numprocs-2)) + 1;
+    printf("Push %f, %f, %f, %f, %f \n", a, b, fa, fb, abarea);
+    
+    i = (rand() % (numprocs-1)) + 1;
     task = pop(tasks);
     MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
     
@@ -109,8 +111,6 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     larea = temp[0];
     rarea = temp[1];
     tasks_per_process[tag] += 1;
-    
-    printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
     
     // Create more tasks or save result
     if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
