@@ -15,6 +15,7 @@
 #define NO_MORE_TASKS MAX_TASKS+1
 
 int *tasks_per_process;
+int result;
 
 double farmer(int);
 void worker(int);
@@ -77,7 +78,9 @@ double farmer(int numprocs) {
     double temp[5];
     double *task;
     
-    result = generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
+    result = 0;
+    
+    generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
     
     return result;
 }
@@ -120,7 +123,7 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
         generateTask(tasks, left, mid, fleft, fmid, larea, numprocs);
         generateTask(tasks, mid, right, fmid, fright, rarea, numprocs);
     }else{
-        return larea + rarea;
+        result += larea + rarea;
     }
 }
 
