@@ -76,9 +76,6 @@ double farmer(int numprocs) {
     double result;
     double points[5], temp[5];
     double *task;
-    double left, mid, fleft, larea;
-    double right, fmid, fright, rarea;
-    
     
     generateTask(A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2);
     
@@ -100,6 +97,8 @@ double farmer(int numprocs) {
 
 double generateTask(double a, double b, double fa, double fb, double abarea){
     double points[5], temp[5];
+    double left, mid, fleft, larea;
+    double right, fmid, fright, rarea;
     
     points[0] = a;
     points[1] = b;
