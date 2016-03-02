@@ -15,7 +15,6 @@
 #define NO_MORE_TASKS MAX_TASKS+1
 
 int *tasks_per_process;
-double result;
 
 double farmer(int);
 void worker(int);
@@ -74,12 +73,13 @@ double farmer(int numprocs) {
     // Init variables to receive info from MPI_Recv
     int i, tag, who;
     MPI_Status status;
+    double result;
     double temp[5];
     double *task;
     
-    generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
+    result = generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
     
-    return 0;
+    return result;
 }
 
 double generateTask(stack *tasks, double a, double b, double fa, double fb, double abarea, int numprocs){
@@ -97,8 +97,6 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     points[4] = abarea;
     push(points, tasks);
     
-    printf("Push %f, %f, %f, %f, %f \n", a, b, fa, fb, abarea);
-    
     i = (rand() % (numprocs-1)) + 1;
     task = pop(tasks);
     MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
@@ -110,6 +108,8 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     rarea = temp[1];
     tasks_per_process[tag] += 1;
     
+    printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
+    
     // Create more tasks or save result
     if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
         
@@ -120,7 +120,7 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
         generateTask(tasks, left, mid, fleft, fmid, larea, numprocs);
         generateTask(tasks, mid, right, fmid, fright, rarea, numprocs);
     }else{
-        result += larea + rarea;
+        return larea + rarea;
     }
 }
 
