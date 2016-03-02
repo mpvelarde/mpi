@@ -175,7 +175,7 @@ void worker(int mypid) {
         result[0] = larea;
         result[1] = rarea;
         
-        /*if( fabs((larea + rarea) - lrarea) > EPSILON ) {
+        if( fabs((larea + rarea) - lrarea) > EPSILON ) {
             result[2] = left;
             result[3] = mid;
             result[4] = right;
@@ -186,7 +186,7 @@ void worker(int mypid) {
         }
         
         // Update counters
-        workdone+= result[0];
+        /*workdone+= result[0];
         tasksdone++;
         tasks_per_process[mypid] = tasksdone;*/
         
