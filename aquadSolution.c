@@ -91,7 +91,7 @@ double farmer(int numprocs) {
     }
     
     // Assume at least as many tasks as workers
-    for (i=0; i < numprocs; i++) {
+    for (i=0; i < (numprocs-1); i++) {
         task = pop(tasks);
         MPI_Send(&task, 5, MPI_DOUBLE, i+1, i, MPI_COMM_WORLD);
     }
