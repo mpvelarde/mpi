@@ -116,7 +116,7 @@ double farmer(int numprocs) {
         task = pop(tasks);
         MPI_Send(&task, 1, MPI_INT, who, NO_MORE_TASKS, MPI_COMM_WORLD);
     }*/
-    printf("Farmer %d wuu \n", mypid);
+    printf("Farmer for %d wuu \n", numprocs);
 }
 
 void worker(int mypid) {
