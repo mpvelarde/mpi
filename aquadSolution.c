@@ -111,7 +111,7 @@ double farmer(int numprocs) {
         MPI_Recv(&temp, 2, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
-        result[tag] = temp;
+        result[tag] = temp[0] + temp[1];
         
         task = pop(tasks);
         MPI_Send(&task, 1, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
