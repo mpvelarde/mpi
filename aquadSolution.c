@@ -91,7 +91,7 @@ double farmer(int numprocs) {
     }
     
     // Assume at least as many tasks as workers
-    for (i=0; i < numprocs; i++) {
+    /*for (i=0; i < numprocs; i++) {
         task = pop(tasks);
         MPI_Send(&task, 1, MPI_INT, i+1, i, MPI_COMM_WORLD);
     }
@@ -115,7 +115,8 @@ double farmer(int numprocs) {
         
         task = pop(tasks);
         MPI_Send(&task, 1, MPI_INT, who, NO_MORE_TASKS, MPI_COMM_WORLD);
-    }
+    }*/
+    printf("Farmer %d wuu \n", mypid);
 }
 
 void worker(int mypid) {
@@ -132,7 +133,7 @@ void worker(int mypid) {
     MPI_Status status;
     
     // Receive task
-    MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    /*MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     while (tag != NO_MORE_TASKS) {
         // Get variables
@@ -160,7 +161,8 @@ void worker(int mypid) {
         MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         tag = status.MPI_TAG;
     }
-    printf("Worker %d solved %d tasks totalling %d units of work \n", mypid, tasksdone, workdone);
+    printf("Worker %d solved %d tasks totalling %d units of work \n", mypid, tasksdone, workdone);*/
+    printf("Worker %d solved nothing \n", mypid);
 }
 
 double quad(double left, double right, double fleft, double fright, double lrarea) {
