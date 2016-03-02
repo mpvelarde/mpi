@@ -138,7 +138,7 @@ void worker(int mypid) {
     
     while (tag != NO_MORE_TASKS) {
         // Get variables
-        left = task[0];
+        /*left = task[0];
         right = task[1];
         fleft = task[2];
         fright = task[3];
@@ -157,7 +157,7 @@ void worker(int mypid) {
         
         // Send result
         MPI_Send(result, 2, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
-        
+        */
         // Receive next task
         MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         tag = status.MPI_TAG;
