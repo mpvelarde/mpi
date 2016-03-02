@@ -95,7 +95,7 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     MPI_Status status;
     double *task;
     
-    printf("Received %f \n", abarea);
+    printf("Push %f \n", abarea);
     
     points[0] = a;
     points[1] = b;
@@ -165,7 +165,8 @@ void worker(int mypid) {
         result[0] = larea;
         result[1] = rarea;
         
-        if( fabs((larea + rarea) - lrarea) > 100*EPSILON ) {
+        if( fabs((larea + rarea) - lrarea) > 1000*EPSILON ) {
+            printf("Worker %d doesnt add %f \n", mypid, result[0] + result[1]);
             result[2] = left;
             result[3] = mid;
             result[4] = right;
