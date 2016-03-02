@@ -77,7 +77,7 @@ double farmer(int numprocs) {
     double temp[5];
     double *task;
     
-    generateTask(A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2);
+    generateTask(A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
     
     
     printf("No more tasks \n");
@@ -95,7 +95,7 @@ double farmer(int numprocs) {
     return result;
 }
 
-double generateTask(double a, double b, double fa, double fb, double abarea){
+double generateTask(double a, double b, double fa, double fb, double abarea, int numprocs){
     double points[5], temp[5];
     double left, mid, fleft, larea;
     double right, fmid, fright, rarea;
