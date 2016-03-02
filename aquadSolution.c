@@ -11,7 +11,8 @@
 
 #define SLEEPTIME 1
 
-#define NO_MORE_TASKS 0
+#define MAX_TASKS 100
+#define NO_MORE_TASKS MAX_TASKS+1
 
 int *tasks_per_process;
 
