@@ -150,7 +150,7 @@ double farmer(int numprocs) {
         rarea = temp[1];
         result += larea + rarea;
      
-        MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
+        //MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
     }
     
     return result;
