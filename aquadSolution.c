@@ -91,11 +91,11 @@ double farmer(int numprocs) {
     }
     
     // Assume at least as many tasks as workers
-    /*for (i=0; i < numprocs; i++) {
+    for (i=0; i < numprocs; i++) {
         task = pop(tasks);
-        MPI_Send(&task, 1, MPI_INT, i+1, i, MPI_COMM_WORLD);
+        MPI_Send(&task, 5, MPI_INT, i+1, i, MPI_COMM_WORLD);
     }
-    
+    /*
     while (i<MAX_TASKS) {
         MPI_Recv(&temp, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
