@@ -154,7 +154,7 @@ void worker(int mypid) {
         tasksdone++;
         
         // Send result
-        MPI_Send(&result, 0, MPI_INT, 0, tag, MPI_COMM_WORLD);
+        MPI_Send(&result, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
         
         // Receive next task
         MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
