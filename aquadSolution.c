@@ -75,8 +75,8 @@ double farmer(int numprocs) {
     double result;
     double points[5], temp[5];
     double *task;
-    double left, mid, fleft, fmid, larea;
-    double mid, right, fmid, fright, rarea;
+    double left, mid, fleft, larea;
+    double right, fmid, fright, rarea;
     double taskCounter = 0;
     
     // Generate first task
