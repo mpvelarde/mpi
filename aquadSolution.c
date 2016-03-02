@@ -86,6 +86,8 @@ double farmer(int numprocs) {
         points[3] = F(B);
         points[4] = (F(A)+F(B)) * (B-A)/2;
         
+        printf("Push %f %f %f %f %f \n", A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2);
+        
         push(points, tasks);
         i++;
     }
