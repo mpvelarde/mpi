@@ -125,7 +125,7 @@ void worker(int mypid) {
     double workdone = 0;
     
     // Init variables to receive task
-    double *task;
+    double task[5];
     int tag;
     double result[2];
     double left, right, fleft, fright, lrarea;
