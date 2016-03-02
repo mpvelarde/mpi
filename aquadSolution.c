@@ -95,8 +95,6 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     MPI_Status status;
     double *task;
     
-    printf("Push %f \n", abarea);
-    
     points[0] = a;
     points[1] = b;
     points[2] = fa;
@@ -125,7 +123,6 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
         generateTask(tasks, left, mid, fleft, fmid, larea, numprocs);
         generateTask(tasks, mid, right, fmid, fright, rarea, numprocs);
     }else{
-        printf("Add %f \n", larea + rarea);
         return larea + rarea;
     }
 }
@@ -155,6 +152,8 @@ void worker(int mypid) {
         fright = task[3];
         lrarea = task[4];
         
+        printf("Worker %d receives %f, %f, %f, %f, %f \n", mypid, left, right, fleft, fright, lrarea);
+        
         mid = (left + right) / 2;
         fmid = F(mid);
         
@@ -166,12 +165,10 @@ void worker(int mypid) {
         result[1] = rarea;
         
         if( fabs((larea + rarea) - lrarea) > EPSILON ) {
-            printf("Worker %d doesnt add %f \n", mypid, result[0] + result[1]);
             result[2] = left;
             result[3] = mid;
             result[4] = right;
         }else{
-            printf("Worker %d adds %f \n", mypid, result[0] + result[1]);
             result[2] = -1;
             result[3] = -1;
             result[4] = -1;
