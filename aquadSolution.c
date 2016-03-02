@@ -11,7 +11,7 @@
 
 #define SLEEPTIME 1
 
-#define NO_MORE_TASKS -1
+#define NO_MORE_TASKS 0
 
 int *tasks_per_process;
 
@@ -150,7 +150,7 @@ double farmer(int numprocs) {
         rarea = temp[1];
         result += larea + rarea;
      
-        //MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
+        MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
     }
     
     return result;
