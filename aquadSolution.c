@@ -93,7 +93,6 @@ double farmer(int numprocs) {
     // Assume at least as many tasks as workers
     for (i=0; i < (numprocs-1); i++) {
         task = pop(tasks);
-        printf("Push %f %f %f %f %f \n", task[0], task[1], task[2], task[3], task[4]);
         MPI_Send(task, 5, MPI_DOUBLE, i+1, i, MPI_COMM_WORLD);
     }
     
@@ -149,8 +148,6 @@ void worker(int mypid) {
         
         mid = (left + right) / 2;
         fmid = F(mid);
-        
-        printf("Computed %f %f \n", mid, fmid);
         
         // Get result
         result[0] = (fleft + fmid) * (mid - left) / 2;
