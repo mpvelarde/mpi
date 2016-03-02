@@ -93,7 +93,7 @@ double farmer(int numprocs) {
     // Assume at least as many tasks as workers
     for (i=0; i < numprocs; i++) {
         task = pop(tasks);
-        MPI_Send(&task, 1, MPI_INT, i+1, i, MPI_COMM_WORLD);
+        MPI_Send(task, 1, MPI_INT, i+1, i, MPI_COMM_WORLD);
     }
     
     while (i<MAX_TASKS) {
@@ -103,7 +103,7 @@ double farmer(int numprocs) {
         result[tag] = temp;
         
         task = pop(tasks);
-        MPI_Send(&task, 1, MPI_INT, who, i, MPI_COMM_WORLD);
+        MPI_Send(task, 1, MPI_INT, who, i, MPI_COMM_WORLD);
         i++;
     }
     
