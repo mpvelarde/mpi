@@ -157,7 +157,7 @@ void worker(int mypid) {
     MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     
-    /*while (tag != NO_MORE_TASKS) {
+    while (tag != NO_MORE_TASKS) {
         // Get variables
         left = task[0];
         right = task[1];
@@ -191,12 +191,12 @@ void worker(int mypid) {
         tasks_per_process[mypid] = tasksdone;
         
         // Send result
-        MPI_Send(result, 5, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
+        //MPI_Send(result, 5, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
     
         // Receive next task
-        MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        tag = status.MPI_TAG;
-    }*/
+        //MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        //tag = status.MPI_TAG;
+    }
     printf("Worker %d solved %d tasks totalling %f units of work \n", mypid, tasksdone, workdone);
 }
 
