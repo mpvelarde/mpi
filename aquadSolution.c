@@ -97,24 +97,24 @@ double farmer(int numprocs) {
     }
     
     while (i<MAX_TASKS) {
-        MPI_Recv(&temp, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        MPI_Recv(&temp, 2, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
         result[tag] = temp;
         
         task = pop(tasks);
-        MPI_Send(&task, 1, MPI_INT, who, i, MPI_COMM_WORLD);
+        MPI_Send(&task, 5, MPI_DOUBLE, who, i, MPI_COMM_WORLD);
         i++;
     }
     
     for (i=0; i < numprocs; i++) {
-        MPI_Recv(&temp, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        MPI_Recv(&temp, 2, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
         result[tag] = temp;
         
         task = pop(tasks);
-        MPI_Send(&task, 1, MPI_INT, who, NO_MORE_TASKS, MPI_COMM_WORLD);
+        MPI_Send(&task, 1, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
     }
     printf("Farmer for %d wuu \n", numprocs);
 }
@@ -133,7 +133,7 @@ void worker(int mypid) {
     MPI_Status status;
     
     // Receive task
-    /*MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     while (tag != NO_MORE_TASKS) {
         // Get variables
@@ -155,14 +155,14 @@ void worker(int mypid) {
         tasksdone++;
         
         // Send result
-        MPI_Send(&result, 0, MPI_INT, 0, tag, MPI_COMM_WORLD);
+        MPI_Send(&result, 2, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
         
         // Receive next task
-        MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         tag = status.MPI_TAG;
     }
-    printf("Worker %d solved %d tasks totalling %d units of work \n", mypid, tasksdone, workdone);*/
-    printf("Worker %d solved nothing \n", mypid);
+    printf("Worker %d solved %d tasks totalling %d units of work \n", mypid, tasksdone, workdone);
+    //printf("Worker %d solved nothing \n", mypid);
 }
 
 double quad(double left, double right, double fleft, double fright, double lrarea) {
