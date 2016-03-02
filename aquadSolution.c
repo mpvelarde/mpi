@@ -88,7 +88,7 @@ double farmer(int numprocs) {
     push(points, tasks);
     taskCounter++;
     
-    /*while (!is_empty(tasks)) {
+    while (!is_empty(tasks)) {
         i = (rand() % (numprocs-2)) + 1;
         task = pop(tasks);
         MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
@@ -126,7 +126,7 @@ double farmer(int numprocs) {
         }
     }
     
-    for (i=0; i < (numprocs-1); i++) {
+    /*for (i=0; i < (numprocs-1); i++) {
         MPI_Recv(&temp, 4, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
