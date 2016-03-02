@@ -88,7 +88,7 @@ double farmer(int numprocs) {
     push(points, tasks);
     taskCounter++;
     
-    while (!is_empty(tasks)) {
+    /*while (!is_empty(tasks)) {
         i = (rand() % (numprocs-2)) + 1;
         task = pop(tasks);
         MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
@@ -135,7 +135,7 @@ double farmer(int numprocs) {
         result += larea + rarea;
      
         MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
-    }
+    }*/
     
     return result;
 }
@@ -157,7 +157,7 @@ void worker(int mypid) {
     MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     
-    while (tag != NO_MORE_TASKS) {
+    /*while (tag != NO_MORE_TASKS) {
         // Get variables
         left = task[0];
         right = task[1];
@@ -196,7 +196,7 @@ void worker(int mypid) {
         // Receive next task
         MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         tag = status.MPI_TAG;
-    }
+    }*/
     printf("Worker %d solved %d tasks totalling %f units of work \n", mypid, tasksdone, workdone);
 }
 
