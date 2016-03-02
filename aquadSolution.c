@@ -88,6 +88,8 @@ double farmer(int numprocs) {
     push(points, tasks);
     taskCounter++;
     
+    printf("Is stack empty? %d \n", is_empty(tasks));
+    
     i = (rand() % (numprocs-2)) + 1;
     task = pop(tasks);
     MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
@@ -101,33 +103,35 @@ double farmer(int numprocs) {
     
     printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
     
-    /*while (!is_empty(tasks)) {
+    // Create more tasks or save result
+    if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
         
-        // Create more tasks or save result
-        if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
-            
-            fleft = F(temp[2]);
-            fmid = F(temp[3]);
-            fright = F(temp[4]);
-            
-            points[0] = left;
-            points[1] = mid;
-            points[2] = fleft;
-            points[3] = fmid;
-            points[4] = larea;
-            push(points, tasks);
-            taskCounter++;
-            
-            points[0] = mid;
-            points[1] = right;
-            points[2] = fmid;
-            points[3] = fright;
-            points[4] = rarea;
-            push(points, tasks);
-            taskCounter++;
-        }else{
-            result += larea + rarea;
-        }
+        fleft = F(temp[2]);
+        fmid = F(temp[3]);
+        fright = F(temp[4]);
+        
+        points[0] = left;
+        points[1] = mid;
+        points[2] = fleft;
+        points[3] = fmid;
+        points[4] = larea;
+        push(points, tasks);
+        taskCounter++;
+        
+        points[0] = mid;
+        points[1] = right;
+        points[2] = fmid;
+        points[3] = fright;
+        points[4] = rarea;
+        push(points, tasks);
+        taskCounter++;
+    }else{
+        result += larea + rarea;
+    }
+    
+    /*while (!is_empty(tasks)) {
+     
+     
     }
     
     for (i=0; i < (numprocs-1); i++) {
