@@ -74,7 +74,7 @@ double farmer(int numprocs) {
     int i, tag, who;
     MPI_Status status;
     double result;
-    double points[5], temp[5];
+    double temp[5];
     double *task;
     
     generateTask(A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2);
@@ -99,6 +99,8 @@ double generateTask(double a, double b, double fa, double fb, double abarea){
     double points[5], temp[5];
     double left, mid, fleft, larea;
     double right, fmid, fright, rarea;
+    int i, tag, who;
+    MPI_Status status;
     
     points[0] = a;
     points[1] = b;
