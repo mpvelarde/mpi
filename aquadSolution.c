@@ -104,6 +104,7 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     
     i = (rand() % (numprocs-1)) + 1;
     task = pop(tasks);
+    printf("Farmer sends %f, %f, %f, %f, %f\n", task[0], task[1], task[2], task[3], task[4]);
     MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
     
     MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
@@ -119,8 +120,9 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
         fleft = F(temp[2]);
         fmid = F(temp[3]);
         fright = F(temp[4]);
-        
+        printf("Farmer generates %f, %f, %f, %f, %f\n", left, mid, fleft, fmid, larea);
         generateTask(tasks, left, mid, fleft, fmid, larea, numprocs);
+        printf("Farmer generates %f, %f, %f, %f, %f\n", mid, right, fmid, fright, rarea);
         generateTask(tasks, mid, right, fmid, fright, rarea, numprocs);
     }else{
         return larea + rarea;
