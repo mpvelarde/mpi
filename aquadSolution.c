@@ -126,7 +126,7 @@ double farmer(int numprocs) {
         }
     }
     
-    /*for (i=0; i < (numprocs-1); i++) {
+    for (i=0; i < (numprocs-1); i++) {
         MPI_Recv(&temp, 4, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
@@ -135,7 +135,7 @@ double farmer(int numprocs) {
         result += larea + rarea;
      
         MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
-    }*/
+    }
     
     return result;
 }
