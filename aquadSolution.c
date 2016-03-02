@@ -137,7 +137,7 @@ void worker(int mypid) {
     tag = status.MPI_TAG;
     left = task[0];
     
-    printf("Received something \n");
+    printf("Received %f from %d \n", left, tag);
     /*
     while (tag != NO_MORE_TASKS) {
         // Get variables
