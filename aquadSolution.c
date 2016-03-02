@@ -152,12 +152,12 @@ void worker(int mypid) {
         fright = task[3];
         lrarea = task[4];
         
-        mid = (left + right) / 2;
+        mid = (left + right) / 2.0;
         fmid = F(mid);
         
         // Get result
-        larea = (fleft + fmid) * (mid - left) / 2;
-        rarea = (fmid + fright) * (right - mid) / 2;
+        larea = (fleft + fmid) * (mid - left) / 2.0;
+        rarea = (fmid + fright) * (right - mid) / 2.0;
         
         result[0] = larea;
         result[1] = rarea;
