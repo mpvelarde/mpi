@@ -77,7 +77,20 @@ double farmer(int numprocs) {
     double temp[5];
     double *task;
     
-    result = generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
+    generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
+    
+    
+    printf("No more tasks \n");
+    for (i=0; i < (numprocs-1); i++) {
+        /*MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        who = status.MPI_SOURCE;
+        tag = status.MPI_TAG;
+        larea = temp[0];
+        rarea = temp[1];
+        result += larea + rarea;*/
+     
+        MPI_Send(task, 5, MPI_DOUBLE, i+1, NO_MORE_TASKS, MPI_COMM_WORLD);
+    }
     
     return result;
 }
@@ -97,7 +110,7 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     points[4] = abarea;
     push(points, tasks);
     
-    i = (rand() % (numprocs-1)) + 1;
+    i = (rand() % (numprocs-2)) + 1;
     task = pop(tasks);
     MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
     
