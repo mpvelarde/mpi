@@ -104,7 +104,7 @@ double generateTask(stack *tasks, double a, double b, double fa, double fb, doub
     points[4] = abarea;
     push(points, tasks);
     
-    i = (rand() % (numprocs-2)) + 1;
+    i = (rand() % (numprocs-1)) + 1;
     task = pop(tasks);
     MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
     
@@ -165,7 +165,7 @@ void worker(int mypid) {
         result[0] = larea;
         result[1] = rarea;
         
-        if( fabs((larea + rarea) - lrarea) > 1000*EPSILON ) {
+        if( fabs((larea + rarea) - lrarea) > EPSILON ) {
             printf("Worker %d doesnt add %f \n", mypid, result[0] + result[1]);
             result[2] = left;
             result[3] = mid;
