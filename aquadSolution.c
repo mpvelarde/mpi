@@ -71,10 +71,10 @@ double farmer(int numprocs) {
     stack *tasks = new_stack();
     
     // Init variables to receive info from MPI_Recv
-    int temp, tag, who;
+    int tag, who;
     MPI_Status status;
     double area[MAX_TASKS], result[MAX_TASKS];
-    double points[5];
+    double points[5], temp[2];
     double *task;
     
     // Generate tasks
@@ -96,7 +96,7 @@ double farmer(int numprocs) {
         MPI_Send(&task, 5, MPI_DOUBLE, i+1, i, MPI_COMM_WORLD);
     }
     
-    /*while (i<MAX_TASKS) {
+    while (i<MAX_TASKS) {
         MPI_Recv(&temp, 2, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
@@ -107,7 +107,7 @@ double farmer(int numprocs) {
         i++;
     }
     
-    for (i=0; i < numprocs; i++) {
+    /*for (i=0; i < numprocs; i++) {
         MPI_Recv(&temp, 2, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
