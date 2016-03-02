@@ -80,7 +80,7 @@ double farmer(int numprocs) {
     double right, fmid, fright, rarea;
     
     
-    generateTask();
+    generateTask(A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2);
     
     
     printf("No more tasks \n");
@@ -98,14 +98,14 @@ double farmer(int numprocs) {
     return result;
 }
 
-double generateTask(double A, double B, double FA, double FB, double ABarea){
+double generateTask(double a, double b, double fa, double fb, double abarea){
     double points[5], temp[5];
     
-    points[0] = A;
-    points[1] = B;
-    points[2] = F(A);
-    points[3] = F(B);
-    points[4] = (F(A)+F(B)) * (B-A)/2;
+    points[0] = a;
+    points[1] = b;
+    points[2] = fa;
+    points[3] = fb;
+    points[4] = abarea;
     push(points, tasks);
     
     i = (rand() % (numprocs-2)) + 1;
