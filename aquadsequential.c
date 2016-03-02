@@ -22,6 +22,7 @@ double quad(double left, double right, double fleft, double fright, double lrare
   fmid = F(mid);
   larea = (fleft + fmid) * (mid - left) / 2;
   rarea = (fmid + fright) * (right - mid) / 2;
+  fprintf(stdout, "larea = %lf, rarea = %lf\n", larea, rarea);
   if( fabs((larea + rarea) - lrarea) > EPSILON ) {
     larea = quad(left, mid, fleft, fmid, larea);
     rarea = quad(mid, right, fmid, fright, rarea);
