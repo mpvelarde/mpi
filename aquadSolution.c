@@ -144,14 +144,14 @@ double farmer(int numprocs) {
     
     printf("No more tasks \n");
     for (i=0; i < (numprocs-1); i++) {
-        MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        /*MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
         larea = temp[0];
         rarea = temp[1];
-        result += larea + rarea;
+        result += larea + rarea;*/
      
-        MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
+        MPI_Send(task, 5, MPI_DOUBLE, i+1, NO_MORE_TASKS, MPI_COMM_WORLD);
     }
     
     return result;
