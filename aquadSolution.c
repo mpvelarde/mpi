@@ -145,6 +145,8 @@ void worker(int mypid) {
         fright = task[3];
         lrarea = task[4];
         
+        printf("Received %f %f %f %f %f \n", task[0], task[1], task[2], task[3], task[4]);
+        
         mid = (left + right) / 2;
         fmid = F(mid);
         
