@@ -152,8 +152,6 @@ void worker(int mypid) {
         fright = task[3];
         lrarea = task[4];
         
-        printf("Worker %d receives %f, %f, %f, %f, %f \n", mypid, left, right, fleft, fright, lrarea);
-        
         mid = (left + right) / 2;
         fmid = F(mid);
         
@@ -163,6 +161,8 @@ void worker(int mypid) {
         
         result[0] = larea;
         result[1] = rarea;
+        
+        printf("Worker %d receives %f, %f, %f, %f, %f and computes %f, %f \n", mypid, left, right, fleft, fright, lrarea, larea, rarea);
         
         if( fabs((larea + rarea) - lrarea) > EPSILON ) {
             result[2] = left;
