@@ -186,9 +186,9 @@ void worker(int mypid) {
         }
         
         // Update counters
-        /*workdone+= result[0];
+        workdone+= result[0];
         tasksdone++;
-        tasks_per_process[mypid] = tasksdone;*/
+        tasks_per_process[mypid] = tasksdone;
         
         // Send result
         //MPI_Send(result, 5, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
