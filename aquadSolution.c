@@ -75,7 +75,7 @@ double farmer(int numprocs) {
     MPI_Status status;
     double area[MAX_TASKS];
     double points[5];
-    double *data;
+    double *task;
     
     // Generate tasks
     int i = 0;
@@ -91,7 +91,7 @@ double farmer(int numprocs) {
     }
     
     // Assume at least as many tasks as workers
-    for (i=0; i<workers; i++) {
+    for (i=0; i < numprocs; i++) {
         task = pop(tasks);
         MPI_Send(&task, 1, MPI_INT, i+1, i, MPI_COMM_WORLD);
     }
