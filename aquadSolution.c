@@ -94,7 +94,7 @@ double farmer(int numprocs) {
     for (i=0; i < (numprocs-1); i++) {
         task = pop(tasks);
         printf("Push %f %f %f %f %f \n", task[0], task[1], task[2], task[3], task[4]);
-        MPI_Send(&task, 5, MPI_DOUBLE, i+1, i, MPI_COMM_WORLD);
+        MPI_Send(task, 5, MPI_DOUBLE, i+1, i, MPI_COMM_WORLD);
     }
     
     while (i<MAX_TASKS) {
@@ -135,7 +135,7 @@ void worker(int mypid) {
     MPI_Status status;
     
     // Receive task
-    MPI_Recv(task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     
     while (tag != NO_MORE_TASKS) {
