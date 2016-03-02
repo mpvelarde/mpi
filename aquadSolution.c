@@ -79,68 +79,9 @@ double farmer(int numprocs) {
     double left, mid, fleft, larea;
     double right, fmid, fright, rarea;
     
-    int sendCount = 0;
-    int recvCount = 0;
     
-    // Generate first task
-    points[0] = A;
-    points[1] = B;
-    points[2] = F(A);
-    points[3] = F(B);
-    points[4] = (F(A)+F(B)) * (B-A)/2;
-    push(points, tasks);
+    generateTask();
     
-    printf("Is stack empty? %d \n", is_empty(tasks));
-    
-    while (!is_empty(tasks)) {
-        i = (rand() % (numprocs-2)) + 1;
-        task = pop(tasks);
-        MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
-        sendCount++;
-        
-        MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        who = status.MPI_SOURCE;
-        tag = status.MPI_TAG;
-        larea = temp[0];
-        rarea = temp[1];
-        tasks_per_process[tag] += 1;
-        recvCount++;
-        
-        printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
-        
-        // Create more tasks or save result
-        if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
-            
-            fleft = F(temp[2]);
-            fmid = F(temp[3]);
-            fright = F(temp[4]);
-            
-            points[0] = left;
-            points[1] = mid;
-            points[2] = fleft;
-            points[3] = fmid;
-            points[4] = larea;
-            push(points, tasks);
-            i = (rand() % (numprocs-2)) + 1;
-            task = pop(tasks);
-            MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
-            sendCount++;
-            
-            points[0] = mid;
-            points[1] = right;
-            points[2] = fmid;
-            points[3] = fright;
-            points[4] = rarea;
-            push(points, tasks);
-            i = (rand() % (numprocs-2)) + 1;
-            task = pop(tasks);
-            MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
-            sendCount++;
-        }else{
-            result += larea + rarea;
-        }
-        
-    }
     
     printf("No more tasks \n");
     for (i=0; i < (numprocs-1); i++) {
@@ -155,6 +96,43 @@ double farmer(int numprocs) {
     }
     
     return result;
+}
+
+double generateTask(double A, double B, double FA, double FB, double ABarea){
+    double points[5], temp[5];
+    
+    points[0] = A;
+    points[1] = B;
+    points[2] = F(A);
+    points[3] = F(B);
+    points[4] = (F(A)+F(B)) * (B-A)/2;
+    push(points, tasks);
+    
+    i = (rand() % (numprocs-2)) + 1;
+    task = pop(tasks);
+    MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+    
+    MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    who = status.MPI_SOURCE;
+    tag = status.MPI_TAG;
+    larea = temp[0];
+    rarea = temp[1];
+    tasks_per_process[tag] += 1;
+    
+    printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
+    
+    // Create more tasks or save result
+    if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
+        
+        fleft = F(temp[2]);
+        fmid = F(temp[3]);
+        fright = F(temp[4]);
+        
+        generateTask(left, mid, fleft, fmid, larea);
+        generateTask(mid, right, fmid, fright, rarea);
+    }else{
+        return larea + rarea;
+    }
 }
 
 void worker(int mypid) {
