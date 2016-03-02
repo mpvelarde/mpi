@@ -125,7 +125,7 @@ void worker(int mypid) {
     double *task;
     int tag;
     double result[2];
-    double left, double right, double fleft, double fright, double lrarea;
+    double left, right, fleft, fright, lrarea;
     double mid, fmid, larea, rarea;
     MPI_Status status;
     
@@ -148,7 +148,7 @@ void worker(int mypid) {
         result[1] = (fmid + fright) * (right - mid) / 2;
         
         // Update counters
-        workdone+=task;
+        workdone+= result[0] + result[1];
         tasksdone++;
         
         // Send result
@@ -158,7 +158,7 @@ void worker(int mypid) {
         MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         tag = status.MPI_TAG;
     }
-    printf("Worker %d solved %d tasks totalling %d units of work \n", rank, tasksdone, workdone);
+    printf("Worker %d solved %d tasks totalling %d units of work \n", mypid, tasksdone, workdone);
 }
 
 double quad(double left, double right, double fleft, double fright, double lrarea) {
