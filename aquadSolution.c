@@ -112,14 +112,16 @@ double farmer(int numprocs) {
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
         result[tag] = temp;
-        MPI_Send(NULL, 1, MPI_INT, who, NO_MORE_TASKS, MPI_COMM_WORLD);
+        
+        task = pop(tasks);
+        MPI_Send(&task, 1, MPI_INT, who, NO_MORE_TASKS, MPI_COMM_WORLD);
     }
 }
 
 void worker(int mypid) {
     // Init counters for worker
-    /*int tasksdone = 0;
-    int workdone  = 0;
+    int tasksdone = 0;
+    double workdone = 0;
     
     // Init variables to receive task
     double *task;
@@ -157,10 +159,8 @@ void worker(int mypid) {
         // Receive next task
         MPI_Recv(&task, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         tag = status.MPI_TAG;
-    }*/
-    //printf("Worker %d solved %d tasks totalling %d units of work \n", mypid, tasksdone, workdone);
-    
-    printf("Worker %d solved nothing \n", mypid);
+    }
+    printf("Worker %d solved %d tasks totalling %d units of work \n", mypid, tasksdone, workdone);
 }
 
 double quad(double left, double right, double fleft, double fright, double lrarea) {
