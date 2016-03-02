@@ -150,6 +150,8 @@ void worker(int mypid) {
         mid = (left + right) / 2;
         fmid = F(mid);
         
+        printf("Computed %f %f \n", mid, fmid);
+        
         // Get result
         result[0] = (fleft + fmid) * (mid - left) / 2;
         result[1] = (fmid + fright) * (right - mid) / 2;
