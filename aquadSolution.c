@@ -107,7 +107,7 @@ double farmer(int numprocs) {
         i++;
     }
     
-    for (i=0; i < numprocs; i++) {
+    for (i=0; i < (numprocs-1); i++) {
         MPI_Recv(&temp, 2, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
