@@ -77,11 +77,9 @@ double farmer(int numprocs) {
     double temp[5];
     double *task;
     
-    result = 0;
-    
     generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
     
-    return result;
+    return 0;
 }
 
 double generateTask(stack *tasks, double a, double b, double fa, double fb, double abarea, int numprocs){
