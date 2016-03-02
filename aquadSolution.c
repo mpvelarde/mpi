@@ -73,7 +73,7 @@ double farmer(int numprocs) {
     // Init variables to receive info from MPI_Recv
     int temp, tag, who;
     MPI_Status status;
-    double area[MAX_TASKS];
+    double area[MAX_TASKS], result[MAX_TASKS];
     double points[5];
     double *task;
     
