@@ -86,8 +86,6 @@ double farmer(int numprocs) {
         points[3] = F(B);
         points[4] = (F(A)+F(B)) * (B-A)/2;
         
-        printf("Push %f %f %f %f %f \n", points[0], points[1], points[2], points[3], points[4]);
-        
         push(points, tasks);
         i++;
     }
@@ -137,7 +135,7 @@ void worker(int mypid) {
     MPI_Status status;
     
     // Receive task
-    MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    MPI_Recv(task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     
     while (tag != NO_MORE_TASKS) {
