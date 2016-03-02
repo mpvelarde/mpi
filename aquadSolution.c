@@ -133,7 +133,7 @@ void worker(int mypid) {
     MPI_Status status;
     
     // Receive task
-    MPI_Recv(&task, 1, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     left = task[0];
     
