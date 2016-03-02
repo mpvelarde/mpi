@@ -97,6 +97,7 @@ double farmer(int numprocs) {
     tag = status.MPI_TAG;
     larea = temp[0];
     rarea = temp[1];
+    tasks_per_process[tag] += 1;
     
     printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
     
@@ -191,7 +192,6 @@ void worker(int mypid) {
         // Update counters
         workdone+= result[0];
         tasksdone++;
-        //tasks_per_process[mypid] = tasksdone;
         
         // Send result
         MPI_Send(result, 5, MPI_DOUBLE, 0, mypid, MPI_COMM_WORLD);
