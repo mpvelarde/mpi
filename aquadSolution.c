@@ -18,7 +18,7 @@ int *tasks_per_process;
 
 double farmer(int);
 void worker(int);
-double quad (double, double, double, double, double);
+double generateTask(double a, double b, double fa, double fb, double abarea, int numprocs);
 
 int main(int argc, char **argv ) {
   int i, myid, numprocs;
@@ -130,8 +130,8 @@ double generateTask(double a, double b, double fa, double fb, double abarea, int
         fmid = F(temp[3]);
         fright = F(temp[4]);
         
-        generateTask(left, mid, fleft, fmid, larea);
-        generateTask(mid, right, fmid, fright, rarea);
+        generateTask(left, mid, fleft, fmid, larea, numprocs);
+        generateTask(mid, right, fmid, fright, rarea, numprocs);
     }else{
         return larea + rarea;
     }
