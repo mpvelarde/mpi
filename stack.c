@@ -29,6 +29,9 @@ void push (double *data, stack *s)
   n = (stack_node *) malloc (sizeof(stack_node));
   n->data[0]  = data[0];
   n->data[1]  = data[1];
+  n->data[2]  = data[2];
+  n->data[3]  = data[3];
+  n->data[4]  = data[4];
 
   if (s->top == NULL) {
     n->next = NULL;
@@ -50,9 +53,13 @@ double * pop (stack * s)
   }
   n = s->top;
   s->top = s->top->next;
-  data = (double *) malloc(2*(sizeof(double)));
+  data = (double *) malloc(5*(sizeof(double)));
   data[0] = n->data[0];
   data[1] = n->data[1];
+  data[2] = n->data[2];
+  data[3] = n->data[3];
+  data[4] = n->data[4];
+
   free (n);
 
   return data;

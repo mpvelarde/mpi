@@ -9,7 +9,7 @@ typedef struct stack_node_tag stack_node;
 typedef struct stack_tag stack;
 
 struct stack_node_tag {
-  double     data[2];
+  double     data[5];
   stack_node *next;
 };
 
