@@ -135,10 +135,7 @@ void worker(int mypid) {
     // Receive task
     MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
-    left = task[0];
     
-    printf("Received %f from %d \n", left, tag);
-    /*
     while (tag != NO_MORE_TASKS) {
         // Get variables
         left = task[0];
@@ -164,9 +161,8 @@ void worker(int mypid) {
         // Receive next task
         MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         tag = status.MPI_TAG;
-    }*/
-    //printf("Worker %d solved %d tasks totalling %f units of work \n", mypid, tasksdone, workdone);
-    printf("Worker %d solved nothing \n", mypid);
+    }
+    printf("Worker %d solved %d tasks totalling %f units of work \n", mypid, tasksdone, workdone);
 }
 
 double quad(double left, double right, double fleft, double fright, double lrarea) {
