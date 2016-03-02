@@ -86,7 +86,7 @@ double farmer(int numprocs) {
         points[3] = F(B);
         points[4] = (F(A)+F(B)) * (B-A)/2;
         
-        printf("Push %f %f %f %f %f \n", A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2);
+        printf("Push %f %f %f %f %f \n", points[0], points[1], points[2], points[3], points[4]);
         
         push(points, tasks);
         i++;
@@ -95,6 +95,7 @@ double farmer(int numprocs) {
     // Assume at least as many tasks as workers
     for (i=0; i < (numprocs-1); i++) {
         task = pop(tasks);
+        printf("Push %f %f %f %f %f \n", task[0], task[1], task[2], task[3], task[4]);
         MPI_Send(&task, 5, MPI_DOUBLE, i+1, i, MPI_COMM_WORLD);
     }
     
