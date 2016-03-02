@@ -141,7 +141,7 @@ double farmer(int numprocs) {
         
     }
     
-    
+    printf("No more tasks \n");
     for (i=0; i < (numprocs-1); i++) {
         MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
