@@ -165,7 +165,7 @@ void worker(int mypid) {
         result[0] = larea;
         result[1] = rarea;
         
-        if( fabs((larea + rarea) - lrarea) > 2*EPSILON ) {
+        if( fabs((larea + rarea) - lrarea) > 100*EPSILON ) {
             result[2] = left;
             result[3] = mid;
             result[4] = right;
