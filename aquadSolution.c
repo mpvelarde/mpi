@@ -101,6 +101,7 @@ double generateTask(double a, double b, double fa, double fb, double abarea){
     double right, fmid, fright, rarea;
     int i, tag, who;
     MPI_Status status;
+    double *task;
     
     points[0] = a;
     points[1] = b;
