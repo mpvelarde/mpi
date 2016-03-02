@@ -88,16 +88,19 @@ double farmer(int numprocs) {
     push(points, tasks);
     taskCounter++;
     
-    while (!is_empty(tasks)) {
-        i = (rand() % (numprocs-2)) + 1;
-        task = pop(tasks);
-        MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
-        
-        MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        who = status.MPI_SOURCE;
-        tag = status.MPI_TAG;
-        larea = temp[0];
-        rarea = temp[1];
+    i = (rand() % (numprocs-2)) + 1;
+    task = pop(tasks);
+    MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+    
+    MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    who = status.MPI_SOURCE;
+    tag = status.MPI_TAG;
+    larea = temp[0];
+    rarea = temp[1];
+    
+    printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
+    
+    /*while (!is_empty(tasks)) {
         
         // Create more tasks or save result
         if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
@@ -135,7 +138,7 @@ double farmer(int numprocs) {
         result += larea + rarea;
      
         MPI_Send(task, 5, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
-    }
+    }*/
     
     return result;
 }
