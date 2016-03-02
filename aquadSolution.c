@@ -36,8 +36,8 @@ int main(int argc, char **argv ) {
   if (myid == 0) { // Farmer
     // init counters
     tasks_per_process = (int *) malloc(sizeof(int)*(numprocs));
-    for (i=0; i<numprocs; i++) {
-      tasks_per_process[i]=0;
+    for (i = 0; i < numprocs; i++) {
+      tasks_per_process[i] = 0;
     }
   }
 
@@ -191,7 +191,7 @@ void worker(int mypid) {
         //tasks_per_process[mypid] = tasksdone;
         
         // Send result
-        //MPI_Send(result, 5, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
+        MPI_Send(result, 5, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
     
         // Receive next task
         //MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
