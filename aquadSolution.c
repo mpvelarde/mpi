@@ -18,7 +18,7 @@ int *tasks_per_process;
 
 double farmer(int);
 void worker(int);
-double generateTask(double a, double b, double fa, double fb, double abarea, int numprocs);
+double generateTask(stack *tasks, double a, double b, double fa, double fb, double abarea, int numprocs);
 
 int main(int argc, char **argv ) {
   int i, myid, numprocs;
@@ -77,7 +77,7 @@ double farmer(int numprocs) {
     double temp[5];
     double *task;
     
-    generateTask(A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
+    generateTask(tasks, A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2, numprocs);
     
     
     printf("No more tasks \n");
@@ -95,7 +95,7 @@ double farmer(int numprocs) {
     return result;
 }
 
-double generateTask(double a, double b, double fa, double fb, double abarea, int numprocs){
+double generateTask(stack *tasks, double a, double b, double fa, double fb, double abarea, int numprocs){
     double points[5], temp[5];
     double left, mid, fleft, larea;
     double right, fmid, fright, rarea;
@@ -130,8 +130,8 @@ double generateTask(double a, double b, double fa, double fb, double abarea, int
         fmid = F(temp[3]);
         fright = F(temp[4]);
         
-        generateTask(left, mid, fleft, fmid, larea, numprocs);
-        generateTask(mid, right, fmid, fright, rarea, numprocs);
+        generateTask(tasks, left, mid, fleft, fmid, larea, numprocs);
+        generateTask(tasks, mid, right, fmid, fright, rarea, numprocs);
     }else{
         return larea + rarea;
     }
