@@ -15,7 +15,7 @@
 #define NO_MORE_TASKS MAX_TASKS+1
 
 int *tasks_per_process;
-int result;
+double result;
 
 double farmer(int);
 void worker(int);
@@ -74,7 +74,6 @@ double farmer(int numprocs) {
     // Init variables to receive info from MPI_Recv
     int i, tag, who;
     MPI_Status status;
-    double result;
     double temp[5];
     double *task;
     
