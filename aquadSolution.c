@@ -96,7 +96,7 @@ double farmer(int numprocs) {
         MPI_Send(&task, 5, MPI_DOUBLE, i+1, i, MPI_COMM_WORLD);
     }
     
-    while (i<MAX_TASKS) {
+    /*while (i<MAX_TASKS) {
         MPI_Recv(&temp, 2, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
@@ -115,7 +115,7 @@ double farmer(int numprocs) {
         
         task = pop(tasks);
         MPI_Send(&task, 1, MPI_DOUBLE, who, NO_MORE_TASKS, MPI_COMM_WORLD);
-    }
+    }*/
     printf("Farmer for %d wuu \n", numprocs);
 }
 
@@ -156,11 +156,11 @@ void worker(int mypid) {
         tasksdone++;
         
         // Send result
-        MPI_Send(result, 2, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
+        //MPI_Send(result, 2, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
     
         // Receive next task
-        MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        tag = status.MPI_TAG;
+        //MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+        //tag = status.MPI_TAG;
     //}
     printf("Worker %d solved %d tasks totalling %f units of work \n", mypid, tasksdone, workdone);
 }
