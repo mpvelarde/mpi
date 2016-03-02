@@ -170,13 +170,14 @@ void worker(int mypid) {
             result[3] = mid;
             result[4] = right;
         }else{
+            printf("Worker %d adds %f \n", mypid, result[0] + result[1]);
             result[2] = -1;
             result[3] = -1;
             result[4] = -1;
         }
         
         // Update counters
-        workdone+= result[0];
+        workdone+= result[0] + result[1];
         tasksdone++;
         
         // Send result
