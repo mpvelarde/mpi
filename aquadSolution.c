@@ -92,28 +92,31 @@ double farmer(int numprocs) {
         // Remove from the stack and send task
         i = (rand() % (numprocs-1)) + 1;
         task = pop(tasks);
+        
+        // Args sent: task buffer, size of buffer, destination, origin (tag), common world
         MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
         
         //printf("Farmer sends %f, %f, %f, %f, %f \n", task[0], task[1], task[2], task[3], task[4]);
         
         // Receive task result
+        // Args sent: result buffer, size of buffer, source, tag, status
         MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        who = status.MPI_SOURCE;
-        tag = status.MPI_TAG;
+        
+        // Get data from temp
         larea = temp[0];
         rarea = temp[1];
+        left = temp[2];
+        mid = temp[3];
+        right = temp[4];
+        
         tasks_per_process[tag] += 1;
         
         // Create more tasks or save result
-        if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
-            
-            left = temp[2];
-            mid = temp[3];
-            right = temp[4];
-            
-            fleft = F(temp[2]);
-            fmid = F(temp[3]);
-            fright = F(temp[4]);
+        if (left != -1 && mid != -1 && right != -1){
+            // Generate values for next two iterations and store in stack
+            fleft = F(left);
+            fmid = F(mid);
+            fright = F(right);
             
             points[0] = left;
             points[1] = mid;
@@ -138,7 +141,7 @@ double farmer(int numprocs) {
         
     }
     
-    //printf("No more tasks \n");
+    // Tell workers there are no more tasks to process
     for (i=0; i < (numprocs-1); i++) {
         MPI_Send(task, 5, MPI_DOUBLE, i+1, NO_MORE_TASKS, MPI_COMM_WORLD);
     }
@@ -163,6 +166,7 @@ void worker(int mypid) {
     MPI_Recv(&task, 5, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     tag = status.MPI_TAG;
     
+    // While tasks in the bag
     while (tag != NO_MORE_TASKS) {
         // Get variables
         left = task[0];
@@ -171,6 +175,7 @@ void worker(int mypid) {
         fright = task[3];
         lrarea = task[4];
         
+        // Generate values
         mid = (left + right) / 2.0;
         fmid = F(mid);
         
@@ -183,11 +188,12 @@ void worker(int mypid) {
         
         //printf("Worker %d receives %f, %f, %f, %f, %f and computes %f, %f \n", mypid, left, right, fleft, fright, lrarea, larea, rarea);
         
+        // If area bigger than threshold send data
         if( fabs((larea + rarea) - lrarea) > EPSILON ) {
             result[2] = left;
             result[3] = mid;
             result[4] = right;
-        }else{
+        }else{ // Otherwise flag values
             result[2] = -1;
             result[3] = -1;
             result[4] = -1;
