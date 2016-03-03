@@ -9,9 +9,11 @@
 
 double quad (double, double, double, double, double);
 
+int iterNum = 0;
+
 int main(int argc, char **argv) {
   double area = quad(A, B, F(A), F(B), (F(A)+F(B)) * (B-A)/2);
-  fprintf(stdout, "Area = %lf\n", area);
+  fprintf(stdout, "Area = %lf; Iternum = %d\n", area, iterNum);
   return 0;
 }
 
@@ -22,8 +24,9 @@ double quad(double left, double right, double fleft, double fright, double lrare
   fmid = F(mid);
   larea = (fleft + fmid) * (mid - left) / 2;
   rarea = (fmid + fright) * (right - mid) / 2;
-  fprintf(stdout, "larea = %lf, rarea = %lf\n", larea, rarea);
+    
   if( fabs((larea + rarea) - lrarea) > EPSILON ) {
+      iterNum++;
     larea = quad(left, mid, fleft, fmid, larea);
     rarea = quad(mid, right, fmid, fright, rarea);
   }

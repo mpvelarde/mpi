@@ -91,6 +91,8 @@ double farmer(int numprocs) {
         task = pop(tasks);
         MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
         
+        printf("Farmer sends %f, %f, %f, %f, %f \n", task[0], task[1], task[2], task[3], task[4]);
+        
         // Receive task result
         MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
@@ -98,8 +100,6 @@ double farmer(int numprocs) {
         larea = temp[0];
         rarea = temp[1];
         tasks_per_process[tag] += 1;
-        
-        printf("Farmer received %f and %f from %d \n", larea, rarea, tag);
         
         // Create more tasks or save result
         if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
@@ -115,13 +115,17 @@ double farmer(int numprocs) {
             points[4] = larea;
             push(points, tasks);
             
+            printf("Farmer pushes %f, %f, %f, %f, %f into stack \n", points[0], points[1], points[2], points[3], points[4]);
+            
             points[0] = mid;
             points[1] = right;
             points[2] = fmid;
             points[3] = fright;
             points[4] = rarea;
             push(points, tasks);
+            printf("Farmer pushes %f, %f, %f, %f, %f into stack \n", points[0], points[1], points[2], points[3], points[4]);
         }else{
+            printf("Farmer adds %f, %f to %f \n", larea, rarea, result);
             result += larea + rarea;
         }
         
