@@ -92,21 +92,27 @@ double farmer(int numprocs) {
         // Remove from the stack and send task
         i = (rand() % (numprocs-1)) + 1;
         task = pop(tasks);
+        // Args sent: task buffer, size of buffer, destination, origin (tag), common world
         MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
         
         //printf("Farmer sends %f, %f, %f, %f, %f \n", task[0], task[1], task[2], task[3], task[4]);
         
         // Receive task result
+        // Args sent: result buffer, size of buffer, source, tag, status
         MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         tag = status.MPI_TAG;
+        
+        // Get data from temp
         larea = temp[0];
         rarea = temp[1];
+        
+        // Update amount of tasks processed by thread
         tasks_per_process[tag] += 1;
         
         // Create more tasks or save result
         if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
-            
+            // Generate values for next two iterations and store in stack
             left = temp[2];
             mid = temp[3];
             right = temp[4];
@@ -138,7 +144,7 @@ double farmer(int numprocs) {
         
     }
     
-    //printf("No more tasks \n");
+    // Tell workers there are no more tasks to process
     for (i=0; i < (numprocs-1); i++) {
         MPI_Send(task, 5, MPI_DOUBLE, i+1, NO_MORE_TASKS, MPI_COMM_WORLD);
     }
