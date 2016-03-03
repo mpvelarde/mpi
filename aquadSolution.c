@@ -74,8 +74,11 @@ double farmer(int numprocs) {
     int i, tag, who;
     MPI_Status status;
     double result;
-    double temp[5];
+    double points[5],temp[5];
     double *task;
+    
+    double left, right, fleft, fright;
+    double mid, fmid, larea, rarea;
     
     // Generate first task
     points[0] = A;
@@ -103,6 +106,10 @@ double farmer(int numprocs) {
         
         // Create more tasks or save result
         if (temp[2] != -1 && temp[3] != -1 && temp[4] != -1){
+            
+            left = temp[2];
+            mid = temp[3];
+            right = temp[4];
             
             fleft = F(temp[2]);
             fmid = F(temp[3]);
