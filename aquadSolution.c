@@ -7,7 +7,7 @@
 #define EPSILON 1e-3
 #define F(arg)  cosh(arg)*cosh(arg)*cosh(arg)*cosh(arg)
 #define A 0.0
-#define B 7.0
+#define B 5.0
 
 #define SLEEPTIME 1
 
