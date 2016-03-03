@@ -174,6 +174,8 @@ void worker(int mypid) {
     tag = status.MPI_TAG;
     
     while (tag != NO_MORE_TASKS) {
+        sleep(rand()%5);
+        
         // Get variables
         left = task[0];
         right = task[1];
