@@ -1,7 +1,7 @@
 /**
  * PPLS Assignment 2
  * Maria Velarde (s1556573)
- * 
+ *
  * TO COMPILE
  * /usr/lib64/openmpi/bin/mpicc -o aquadSolution aquadSolution.c -lm
  *
@@ -10,11 +10,99 @@
  * 
  * Implementation Strategy
  * -----------------------
- * Using the
+ * Using MPI, the recursive algorithm is simulated.
+ * Given the 5 parameters A, B, F(A), F(B) and ABarea the farmer
+ * will add tasks to the bag. 
+ * The farmer receives from the workers either larea, rarea, left, mid, 
+ * right or only larea, rarea. If five parameters are received, then a new
+ * task must be added to the bag, otherwise larea and rarea are 
+ * added to the final result.
  *
+ * Given 5 parameters A,B, F(A), F(B) and ABarea, each
+ * worker must compute mid point and left and right areas.
+ * While fabs((larea + rarea) - ABarea) is bigger than a
+ * threshold, the worker will return 5 parameters, otherwise
+ * will only return larea and rarea.
  *
  * MPI Primitives used
  * -------------------
+ * The following primitives were used because the were necessary
+ * for the MPI environment to work: initialize, finalize, 
+ * get number of processes and get rank of current process.
+ *
+ * int MPI_Init(int *argc, char ***argv)
+ * -------------------------------------
+ * Initializes the MPI environment.
+ *
+ * int MPI_Comm_size(MPI_Comm comm, int *size)
+ * -------------------------------------------
+ * Given a communicator, MPI_COMM_WORLD in this case,
+ * gets the number of processes available.
+ *
+ * int MPI_Comm_rank(MPI_Comm comm, int *rank)
+ * -------------------------------------------
+ * Gets the rank of the current process in the communicator's group.
+ *
+ * int MPI_Finalize()
+ * ------------------
+ * Ends and clean the MPI environment
+ *
+ *--------------------------------------------------------------------------------
+ * The following primitives were used because they suited best the implementation.
+ *
+ * FARMER
+ * ------
+ * int MPI_Sendrecv(void *sendbuf, int sendcount, MPI_Datatype sendtype,
+ * int dest, int sendtag, void *recvbuf, int recvcount,
+ * MPI_Datatype recvtype, int source, int recvtag,
+ * MPI_Comm comm, MPI_Status *status)
+ * ---------------------------------------------------------------------
+ * To be able to finalize the MPI environment every send must have its corresponding
+ * receive. 
+ * In the while, whenever a task is popped from the stack it is send to a
+ * random process and the while waits for its result. 
+ * Instead of using MPI_Send followed by its correspondent MPI_Recv, 
+ * MPI_Sendrecv is used.
+ *
+ *
+ * int MPI_Send(void *buf, int count, MPI_Datatype datatype, int dest,
+ * int tag, MPI_Comm comm)
+ * -------------------------------------------------------------------
+ * Later on, the farmer needs to tell every worker that there are no
+ * more tasks. MPI_Send is sufficient for this case, using MPI_Isend 
+ * for example would only complicate things by creating the need to
+ * probe communication. Non-blocking communication shouldn't be used
+ * unless is necessary.
+ *
+ *
+ * WORKER
+ * ------
+ * The worker wil receive from the farmer either many MPI_Sendrecv
+ * with data or a single MPI_Send with the NO MORE TASKS tag.
+ *
+ * int MPI_Recv(void *buf, int count, MPI_Datatype datatype,
+ * int source, int tag, MPI_Comm comm, MPI_Status *status)
+ * ---------------------------------------------------------
+ * The first receive corresponds to the first task received from the 
+ * farmer's MPI_Sendrecv. Once in the while the receive will correspond
+ * either to the farmer's MPI_Sendrecv or to the farmer's MPI_Send.
+ * Depending on the tag received the worker will stay or not in the while.
+ *
+ * int MPI_Send(void *buf, int count, MPI_Datatype datatype, int dest,
+ * int tag, MPI_Comm comm)
+ * -------------------------------------------------------------------
+ * After every worker's MPI_Recv corresponding to a MPI_Sendrecv from the 
+ * farmer, results should be sent back.
+ *
+ * For readibility and not associate the MPI_Send corresponding to the results
+ * of one task, with the MPI_Recv corresponding to the next task (or termination 
+ * condition), separate MPI_Recv and MPI_Send were used in the worker.
+ *
+ *
+ * References
+ * ----------
+ * Course overheads (http://www.inf.ed.ac.uk/teaching/courses/ppls/pplsslides.pdf)
+ * MPI Documentation (https://www.open-mpi.org/doc/v1.4/)
  *
  **/
 #include <stdio.h>
