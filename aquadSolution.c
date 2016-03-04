@@ -9,9 +9,12 @@
  *  /usr/lib64/openmpi/bin/mpirun -c 5 ./aquadSolution
  * 
  * Implementation Strategy
+ * -----------------------
+ * Using the
  *
  *
  * MPI Primitives used
+ * -------------------
  *
  **/
 #include <stdio.h>
@@ -27,8 +30,7 @@
 
 #define SLEEPTIME 1
 
-#define MAX_TASKS 100
-#define NO_MORE_TASKS MAX_TASKS+1
+#define NO_MORE_TASKS 100
 
 int *tasks_per_process;
 
