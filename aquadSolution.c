@@ -120,18 +120,11 @@ double farmer(int numprocs) {
     push(points, tasks);
     
     while (!is_empty(tasks)) {
-        // Remove from the stack and send task
+        // Remove from the stack, send task and receive result
         i = (rand() % (numprocs-1)) + 1;
         task = pop(tasks);
-        // Args sent: task buffer, size of buffer, destination, origin (tag), common world
-        //MPI_Send(task, 5, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
-        
-        //printf("Farmer sends %f, %f, %f, %f, %f \n", task[0], task[1], task[2], task[3], task[4]);
-        
-        // Receive task result
-        // Args sent: result buffer, size of buffer, source, tag, status
-        //MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        
+
+        // Args sent: task buffer, size of send buffer, destination, origin (tag), result buffer, size of result buffer, source, tag, common world, status
         MPI_Sendrecv(task, 5, MPI_DOUBLE, i, 0, &temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         who = status.MPI_SOURCE;
         
