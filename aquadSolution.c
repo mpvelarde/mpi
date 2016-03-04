@@ -34,7 +34,6 @@ int *tasks_per_process;
 
 double farmer(int);
 void worker(int);
-double generateTask(stack *tasks, double a, double b, double fa, double fb, double abarea, int numprocs);
 
 /* STACK DECLARATIONS */
 typedef struct stack_node_tag stack_node;
