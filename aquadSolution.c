@@ -199,7 +199,7 @@ void worker(int mypid) {
     tag = status.MPI_TAG;
     
     while (tag != NO_MORE_TASKS) {
-        sleep(SLEEPTIME);
+        usleep(SLEEPTIME);
         
         // Get variables
         left = task[0];
