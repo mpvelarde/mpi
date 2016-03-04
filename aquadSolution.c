@@ -1,14 +1,24 @@
 /**
-* PPLS Assignment 2
-* Maria Velarde (s1556573)
-* 
-*
-**/
+ * PPLS Assignment 2
+ * Maria Velarde (s1556573)
+ * 
+ * TO COMPILE
+ * /usr/lib64/openmpi/bin/mpicc -o aquadSolution aquadSolution.c -lm
+ *
+ * TO RUN
+ *  /usr/lib64/openmpi/bin/mpirun -c 5 ./aquadSolution
+ * 
+ * Implementation Strategy
+ *
+ *
+ * MPI Primitives used
+ *
+ **/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <mpi.h>
-#include "stack.h"
+
 
 #define EPSILON 1e-3
 #define F(arg)  cosh(arg)*cosh(arg)*cosh(arg)*cosh(arg)
@@ -25,6 +35,22 @@ int *tasks_per_process;
 double farmer(int);
 void worker(int);
 double generateTask(stack *tasks, double a, double b, double fa, double fb, double abarea, int numprocs);
+
+/* STACK DECLARATIONS */
+typedef struct stack_node_tag stack_node;
+typedef struct stack_tag stack;
+
+struct stack_node_tag { double data[5]; stack_node *next;};
+struct stack_tag { stack_node *top; };
+
+/* stack init / destroy */
+stack *new_stack();
+void free_stack(stack *);
+
+/* stack methods */
+void push(double *, stack *);
+double *pop (stack *);
+int is_empty (stack *);
 
 int main(int argc, char **argv ) {
   int i, myid, numprocs;
@@ -174,7 +200,7 @@ void worker(int mypid) {
     tag = status.MPI_TAG;
     
     while (tag != NO_MORE_TASKS) {
-        //sleep(rand()%1);
+        sleep(SLEEPTIME);
         
         // Get variables
         left = task[0];
@@ -217,5 +243,72 @@ void worker(int mypid) {
         tag = status.MPI_TAG;
     }
     //printf("Worker %d solved %d tasks totalling %f units of work \n", mypid, tasksdone, workdone);
+}
+
+/* STACK IMPLEMENTATION */
+// creating a new stack
+stack * new_stack()
+{
+    stack *n;
+    
+    n = (stack *) malloc (sizeof(stack));
+    
+    n->top = NULL;
+    
+    return n;
+}
+
+// cleaning up after use
+void free_stack(stack *s)
+{
+    free(s);
+}
+
+// Push data to stack s, data has to be an array of 2 doubles
+void push (double *data, stack *s)
+{
+    stack_node *n;
+    n = (stack_node *) malloc (sizeof(stack_node));
+    n->data[0]  = data[0];
+    n->data[1]  = data[1];
+    n->data[2]  = data[2];
+    n->data[3]  = data[3];
+    n->data[4]  = data[4];
+    
+    if (s->top == NULL) {
+        n->next = NULL;
+        s->top  = n;
+    } else {
+        n->next = s->top;
+        s->top = n;
+    }
+}
+
+// Pop data from stack s
+double * pop (stack * s)
+{
+    stack_node * n;
+    double *data;
+    
+    if (s == NULL || s->top == NULL) {
+        return NULL;
+    }
+    n = s->top;
+    s->top = s->top->next;
+    data = (double *) malloc(5*(sizeof(double)));
+    data[0] = n->data[0];
+    data[1] = n->data[1];
+    data[2] = n->data[2];
+    data[3] = n->data[3];
+    data[4] = n->data[4];
+    
+    free (n);
+    
+    return data;
+}
+
+// Check for an empty stack
+int is_empty (stack * s) {
+    return (s == NULL || s->top == NULL);
 }
 
