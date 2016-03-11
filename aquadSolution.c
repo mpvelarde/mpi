@@ -251,6 +251,8 @@ double farmer(int numprocs) {
             iddleCount--;
         }
         
+        printf("Receive \n");
+        
         // While busy workers, receive results
         while (iddleCount < numprocs){
             // Args sent: result buffer, size of result buffer, data type, source, tag, common world, status
