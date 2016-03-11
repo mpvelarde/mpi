@@ -211,7 +211,7 @@ double farmer(int numprocs) {
     stack_int *idleWorkers = new_stack_int();
     
     // Init variables to receive info from MPI_Recv
-    int i, tag, who, iddleCount;
+    int i, tag, who, idleCount;
     MPI_Status status;
     double result;
     double points[5],temp[5];
@@ -221,7 +221,7 @@ double farmer(int numprocs) {
     double mid, fmid, larea, rarea;
     
     // Init idle workers stacks
-    iddleCount = numprocs - 1;
+    idleCount = numprocs - 1;
     for (i = 1; i < numprocs; i++) {
         push_int(i, idleWorkers);
     }
@@ -237,6 +237,7 @@ double farmer(int numprocs) {
     // While there are tasks to process
     while (!is_empty(tasks)) {
         
+        printf("Send \n");
         // If tasks to do and idle workers, send tasks
         while (!is_empty_int(idleWorkers) && !is_empty(tasks)) {
             int worker = pop_int(idleWorkers);
@@ -248,13 +249,13 @@ double farmer(int numprocs) {
             printf("Send %f, %f, %f, %f, %f to %d \n", task[0], task[1], task[2], task[3], task[4], worker);
             // Args sent: task buffer, size of send buffer, data type, destination, origin (tag), common world
             MPI_Send(task, 5, MPI_DOUBLE, worker, 0, MPI_COMM_WORLD);
-            iddleCount--;
+            idleCount--;
         }
         
         printf("Receive \n");
-        
+        int busyWorkers = numprocs - idleCount;
         // While busy workers, receive results
-        while (iddleCount < numprocs){
+        while (busyWorkers > 0){
             // Args sent: result buffer, size of result buffer, data type, source, tag, common world, status
             MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
             who = status.MPI_SOURCE;
@@ -271,7 +272,10 @@ double farmer(int numprocs) {
             
             // Update idle workers
             push_int(who, idleWorkers);
-            iddleCount++;
+            idleCount++;
+            busyWorkers = numprocs - idleCount;
+            
+            printf("Idle count: %d \n", idleCount);
             
             // Create more tasks or save result
             if (left != -1 && mid != -1 && right != -1){
