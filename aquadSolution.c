@@ -226,6 +226,11 @@ double farmer(int numprocs) {
         push_int(i, idleWorkers);
     }
     
+    while (!is_empty_int(idleWorkers)) {
+        int worker = pop_int(iddleWorkers);
+        printf("Idle worker: %d\n", worker);
+    }
+    
     // Generate first task
     points[0] = A;
     points[1] = B;
