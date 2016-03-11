@@ -460,14 +460,13 @@ void push_int (int data, stack_int *s)
 int pop_int (stack_int * s)
 {
     stack_node_int * n;
-    int *data;
+    int data;
     
     if (s == NULL || s->top == NULL) {
         return NULL;
     }
     n = s->top;
     s->top = s->top->next;
-    data = (int *) malloc(5*(sizeof(int)));
     data = n->data;
     
     free (n);
