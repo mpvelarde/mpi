@@ -307,6 +307,8 @@ double farmer(int numprocs) {
         }
     }
     
+    printf("No more tasks \n");
+    
     // Tell workers there are no more tasks to process
     for (i=0; i < (numprocs-1); i++) {
         MPI_Send(task, 5, MPI_DOUBLE, i+1, NO_MORE_TASKS, MPI_COMM_WORLD);
