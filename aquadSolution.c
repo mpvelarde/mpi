@@ -275,7 +275,7 @@ double farmer(int numprocs) {
             idleCount++;
             busyWorkers = numprocs - idleCount;
             
-            printf("Idle count: %d \n", idleCount);
+            printf("Busy workers: %d \n", busyWorkers);
             
             // Create more tasks or save result
             if (left != -1 && mid != -1 && right != -1){
