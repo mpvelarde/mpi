@@ -245,6 +245,7 @@ double farmer(int numprocs) {
             task = pop(tasks);
             
             // Send task
+            printf("Send %f, %f, %f, %f, %f to %d \n", task[0], task[1], task[2], task[3], task[4], worker);
             // Args sent: task buffer, size of send buffer, data type, destination, origin (tag), common world
             MPI_Send(task, 5, MPI_DOUBLE, worker, 0, MPI_COMM_WORLD);
             iddleCount--;
