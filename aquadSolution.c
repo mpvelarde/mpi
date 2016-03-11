@@ -227,7 +227,7 @@ double farmer(int numprocs) {
     }
     
     while (!is_empty_int(idleWorkers)) {
-        int worker = pop_int(iddleWorkers);
+        int worker = pop_int(idleWorkers);
         printf("Idle worker: %d\n", worker);
     }
     
