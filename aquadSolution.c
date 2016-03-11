@@ -435,7 +435,7 @@ stack_int * new_stack_int()
 }
 
 // cleaning up after use
-void free_stack(stack_int *s)
+void free_stack_int(stack_int *s)
 {
     free(s);
 }
