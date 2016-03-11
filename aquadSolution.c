@@ -463,7 +463,7 @@ int pop_int (stack_int * s)
     int data;
     
     if (s == NULL || s->top == NULL) {
-        return NULL;
+        return -1;
     }
     n = s->top;
     s->top = s->top->next;
