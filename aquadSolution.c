@@ -226,11 +226,6 @@ double farmer(int numprocs) {
         push_int(i, idleWorkers);
     }
     
-    while (!is_empty_int(idleWorkers)) {
-        int worker = pop_int(idleWorkers);
-        printf("Idle worker: %d\n", worker);
-    }
-    
     // Generate first task
     points[0] = A;
     points[1] = B;
@@ -239,53 +234,70 @@ double farmer(int numprocs) {
     points[4] = (F(A)+F(B)) * (B-A)/2;
     push(points, tasks);
     
+    // While there are tasks to process
     while (!is_empty(tasks)) {
-        // Remove from the stack, send task and receive result
-        i = (rand() % (numprocs-1)) + 1;
-        task = pop(tasks);
-
-        // Args sent: task buffer, size of send buffer, destination, origin (tag), result buffer, size of result buffer, source, tag, common world, status
-        MPI_Sendrecv(task, 5, MPI_DOUBLE, i, 0, &temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        who = status.MPI_SOURCE;
         
-        // Get data from temp
-        larea = temp[0];
-        rarea = temp[1];
-        left = temp[2];
-        mid = temp[3];
-        right = temp[4];
-
-        // Update amount of tasks processed by thread
-        tasks_per_process[who] += 1;
-        
-        // Create more tasks or save result
-        if (left != -1 && mid != -1 && right != -1){
-            // Generate values for next two iterations and store in stack
-            fleft = F(temp[2]);
-            fmid = F(temp[3]);
-            fright = F(temp[4]);
+        // If tasks to do and idle workers, send tasks
+        while (!is_empty_int(idleWorkers) && !is_empty(tasks)) {
+            int worker = pop_int(idleWorkers);
             
-            points[0] = left;
-            points[1] = mid;
-            points[2] = fleft;
-            points[3] = fmid;
-            points[4] = larea;
-            push(points, tasks);
+            // Remove from the stack
+            task = pop(tasks);
             
-            //printf("Farmer pushes %f, %f, %f, %f, %f into stack \n", points[0], points[1], points[2], points[3], points[4]);
-            
-            points[0] = mid;
-            points[1] = right;
-            points[2] = fmid;
-            points[3] = fright;
-            points[4] = rarea;
-            push(points, tasks);
-            //printf("Farmer pushes %f, %f, %f, %f, %f into stack \n", points[0], points[1], points[2], points[3], points[4]);
-        }else{
-            //printf("Farmer adds %f, %f to %f \n", larea, rarea, result);
-            result += larea + rarea;
+            // Send task
+            // Args sent: task buffer, size of send buffer, data type, destination, origin (tag), common world
+            MPI_Send(task, 5, MPI_DOUBLE, worker, 0, MPI_COMM_WORLD);
+            iddleCount--;
         }
         
+        // While busy workers, receive results
+        while (iddleCount < numprocs){
+            // Args sent: result buffer, size of result buffer, data type, source, tag, common world, status
+            MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+            who = status.MPI_SOURCE;
+
+            // Get data from temp
+            larea = temp[0];
+            rarea = temp[1];
+            left = temp[2];
+            mid = temp[3];
+            right = temp[4];
+            
+            // Update amount of tasks processed by thread
+            tasks_per_process[who] += 1;
+            
+            // Update idle workers
+            push_int(who, idleWorkers);
+            iddleCount++;
+            
+            // Create more tasks or save result
+            if (left != -1 && mid != -1 && right != -1){
+                // Generate values for next two iterations and store in stack
+                fleft = F(temp[2]);
+                fmid = F(temp[3]);
+                fright = F(temp[4]);
+                
+                points[0] = left;
+                points[1] = mid;
+                points[2] = fleft;
+                points[3] = fmid;
+                points[4] = larea;
+                push(points, tasks);
+                
+                //printf("Farmer pushes %f, %f, %f, %f, %f into stack \n", points[0], points[1], points[2], points[3], points[4]);
+                
+                points[0] = mid;
+                points[1] = right;
+                points[2] = fmid;
+                points[3] = fright;
+                points[4] = rarea;
+                push(points, tasks);
+                //printf("Farmer pushes %f, %f, %f, %f, %f into stack \n", points[0], points[1], points[2], points[3], points[4]);
+            }else{
+                //printf("Farmer adds %f, %f to %f \n", larea, rarea, result);
+                result += larea + rarea;
+            }
+        }
     }
     
     // Tell workers there are no more tasks to process
