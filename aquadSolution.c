@@ -236,8 +236,7 @@ double farmer(int numprocs) {
     
     // While there are tasks to process
     while (!is_empty(tasks)) {
-        
-        printf("Send \n");
+
         // If tasks to do and idle workers, send tasks
         while (!is_empty_int(idleWorkers) && !is_empty(tasks)) {
             int worker = pop_int(idleWorkers);
@@ -246,13 +245,11 @@ double farmer(int numprocs) {
             task = pop(tasks);
             
             // Send task
-            printf("Send %f, %f, %f, %f, %f to %d \n", task[0], task[1], task[2], task[3], task[4], worker);
+            //printf("Send %f, %f, %f, %f, %f to %d \n", task[0], task[1], task[2], task[3], task[4], worker);
             // Args sent: task buffer, size of send buffer, data type, destination, origin (tag), common world
             MPI_Send(task, 5, MPI_DOUBLE, worker, 0, MPI_COMM_WORLD);
             idleCount--;
         }
-        
-        printf("Receive \n");
 
         // While busy workers, receive results
         while ((numprocs - 1) > idleCount){
@@ -303,8 +300,6 @@ double farmer(int numprocs) {
             }
         }
     }
-    
-    printf("No more tasks \n");
     
     // Tell workers there are no more tasks to process
     for (i=0; i < (numprocs-1); i++) {
