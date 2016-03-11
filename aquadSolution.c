@@ -253,9 +253,9 @@ double farmer(int numprocs) {
         }
         
         printf("Receive \n");
-        int busyWorkers = numprocs - idleCount;
+
         // While busy workers, receive results
-        while (busyWorkers > 0){
+        while ((numprocs - 1) > idleCount){
             // Args sent: result buffer, size of result buffer, data type, source, tag, common world, status
             MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
             who = status.MPI_SOURCE;
@@ -273,9 +273,6 @@ double farmer(int numprocs) {
             // Update idle workers
             push_int(who, idleWorkers);
             idleCount++;
-            busyWorkers = numprocs - idleCount;
-            
-            printf("Busy workers: %d \n", busyWorkers);
             
             // Create more tasks or save result
             if (left != -1 && mid != -1 && right != -1){
