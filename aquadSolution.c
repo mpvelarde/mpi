@@ -153,8 +153,8 @@ stack_int *new_stack_int();
 void free_stack_int(stack_int *);
 
 /* stack methods */
-void push_int(int *, stack_int *);
-int *pop_int (stack_int *);
+void push_int(int, stack_int *);
+int pop_int (stack_int *);
 int is_empty_int (stack_int *);
 
 
@@ -441,7 +441,7 @@ void free_stack_int(stack_int *s)
 }
 
 // Push data to stack s, data has to be an array of 2 doubles
-void push_int (int *data, stack_int *s)
+void push_int (int data, stack_int *s)
 {
     stack_node_int *n;
     n = (stack_node_int *) malloc (sizeof(stack_node_int));
@@ -457,7 +457,7 @@ void push_int (int *data, stack_int *s)
 }
 
 // Pop data from stack s
-int * pop_int (stack_int * s)
+int pop_int (stack_int * s)
 {
     stack_node_int * n;
     int *data;
