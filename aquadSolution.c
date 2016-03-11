@@ -24,6 +24,10 @@
  * threshold, the worker will return 5 parameters, otherwise
  * will only return larea and rarea.
  *
+ * A stack of integers and a counter are used to keep track of the idle workers.
+ * While there are tasks to process and idle workers, the farmer will send tasks.
+ * Otherwise, it will receive results from the workers until there are no busy workers.
+ *
  * MPI Primitives used
  * -------------------
  * The following primitives were used because the were necessary
@@ -52,17 +56,18 @@
  *
  * FARMER
  * ------
- * int MPI_Sendrecv(void *sendbuf, int sendcount, MPI_Datatype sendtype,
- * int dest, int sendtag, void *recvbuf, int recvcount,
- * MPI_Datatype recvtype, int source, int recvtag,
- * MPI_Comm comm, MPI_Status *status)
+ * int MPI_Send(void *buf, int count, MPI_Datatype datatype, int dest,
+ * int tag, MPI_Comm comm)
  * ---------------------------------------------------------------------
  * To be able to finalize the MPI environment every send must have its corresponding
  * receive. 
- * In the while, whenever a task is popped from the stack it is send to a
- * random process and the while waits for its result. 
- * Instead of using MPI_Send followed by its correspondent MPI_Recv, 
- * MPI_Sendrecv is used.
+ * The first while in the farmer gets an idle worker and a task and uses send.
+ *
+ *
+ * int MPI_Recv(void *buf, int count, MPI_Datatype datatype,
+ * int source, int tag, MPI_Comm comm, MPI_Status *status)
+ * ---------------------------------------------------------
+ * The second while knows how many workers are busy and receives data from them.
  *
  *
  * int MPI_Send(void *buf, int count, MPI_Datatype datatype, int dest,
