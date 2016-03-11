@@ -141,6 +141,24 @@ void push(double *, stack *);
 double *pop (stack *);
 int is_empty (stack *);
 
+/* INT STACK DECLARATIONS */
+typedef struct stack_node_tag_int stack_node_int;
+typedef struct stack_tag_int stack_int;
+
+struct stack_node_tag_int { int data; stack_node_int *next;};
+struct stack_tag_int { stack_node_int *top; };
+
+/* stack init / destroy */
+stack_int *new_stack_int();
+void free_stack_int(stack_int *);
+
+/* stack methods */
+void push_int(int *, stack_int *);
+int *pop_int (stack_int *);
+int is_empty_int (stack_int *);
+
+
+/* Bag of tasks implementation */
 int main(int argc, char **argv ) {
   int i, myid, numprocs;
   double area, a, b;
@@ -190,9 +208,10 @@ int main(int argc, char **argv ) {
 double farmer(int numprocs) {
     // Init stack of tasks
     stack *tasks = new_stack();
+    stack_int *idleWorkers = new_stack_int();
     
     // Init variables to receive info from MPI_Recv
-    int i, tag, who;
+    int i, tag, who, iddleCount;
     MPI_Status status;
     double result;
     double points[5],temp[5];
@@ -200,6 +219,12 @@ double farmer(int numprocs) {
     
     double left, right, fleft, fright;
     double mid, fmid, larea, rarea;
+    
+    // Init idle workers stacks
+    iddleCount = numprocs - 1;
+    for (i = 1; i < numprocs; i++) {
+        push_int(i, idleWorkers);
+    }
     
     // Generate first task
     points[0] = A;
@@ -393,6 +418,65 @@ double * pop (stack * s)
 
 // Check for an empty stack
 int is_empty (stack * s) {
+    return (s == NULL || s->top == NULL);
+}
+
+/* INT STACK IMPLEMENTATION */
+// creating a new stack
+stack_int * new_stack_int()
+{
+    stack_int *n;
+    
+    n = (stack_int *) malloc (sizeof(stack_int));
+    
+    n->top = NULL;
+    
+    return n;
+}
+
+// cleaning up after use
+void free_stack(stack_int *s)
+{
+    free(s);
+}
+
+// Push data to stack s, data has to be an array of 2 doubles
+void push_int (int *data, stack_int *s)
+{
+    stack_node_int *n;
+    n = (stack_node_int *) malloc (sizeof(stack_node_int));
+    n->data  = data;
+    
+    if (s->top == NULL) {
+        n->next = NULL;
+        s->top  = n;
+    } else {
+        n->next = s->top;
+        s->top = n;
+    }
+}
+
+// Pop data from stack s
+int * pop_int (stack_int * s)
+{
+    stack_node_int * n;
+    int *data;
+    
+    if (s == NULL || s->top == NULL) {
+        return NULL;
+    }
+    n = s->top;
+    s->top = s->top->next;
+    data = (double *) malloc(5*(sizeof(int)));
+    data = n->data;
+    
+    free (n);
+    
+    return data;
+}
+
+// Check for an empty stack
+int is_empty_int (stack_int * s) {
     return (s == NULL || s->top == NULL);
 }
 
