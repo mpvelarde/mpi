@@ -467,7 +467,7 @@ int * pop_int (stack_int * s)
     }
     n = s->top;
     s->top = s->top->next;
-    data = (double *) malloc(5*(sizeof(int)));
+    data = (int *) malloc(5*(sizeof(int)));
     data = n->data;
     
     free (n);
