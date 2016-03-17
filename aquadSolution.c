@@ -216,7 +216,7 @@ double farmer(int numprocs) {
     stack_int *idleWorkers = new_stack_int();
     
     // Init variables to receive info from MPI_Recv
-    int i, tag, who, idleCount;
+    int i, tag, who, busyWorkers;
     MPI_Status status;
     double result;
     double points[5],temp[5];
@@ -226,7 +226,7 @@ double farmer(int numprocs) {
     double mid, fmid, larea, rarea;
     
     // Init idle workers stacks
-    idleCount = numprocs - 1;
+    busyWorkers = 0;
     for (i = 1; i < numprocs; i++) {
         push_int(i, idleWorkers);
     }
@@ -253,11 +253,11 @@ double farmer(int numprocs) {
             //printf("Send %f, %f, %f, %f, %f to %d \n", task[0], task[1], task[2], task[3], task[4], worker);
             // Args sent: task buffer, size of send buffer, data type, destination, origin (tag), common world
             MPI_Send(task, 5, MPI_DOUBLE, worker, 0, MPI_COMM_WORLD);
-            idleCount--;
+            busyWorkers++;
         }
 
         // While busy workers, receive results
-        while ((numprocs - 1) > idleCount){
+        while (busyWorkers > 0){
             // Args sent: result buffer, size of result buffer, data type, source, tag, common world, status
             MPI_Recv(&temp, 5, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
             who = status.MPI_SOURCE;
@@ -274,7 +274,7 @@ double farmer(int numprocs) {
             
             // Update idle workers
             push_int(who, idleWorkers);
-            idleCount++;
+            busyWorkers--;
             
             // Create more tasks or save result
             if (left != -1 && mid != -1 && right != -1){
