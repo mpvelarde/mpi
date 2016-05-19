@@ -1,11 +1,6 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-Parallel Programming Languages & Systems
-Exercise Sheet 2
+### Parallel Programming Languages & Systems Exercise Sheet 2 ###
 
 You will write a C/MPI program which implements a given parallel algorithm.
 
